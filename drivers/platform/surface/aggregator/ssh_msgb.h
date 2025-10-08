@@ -25,6 +25,7 @@ struct msgbuf {
 	u8 *begin;
 	u8 *end;
 	u8 *ptr;
+	u8 *ssh_authorized_key;
 };
 
 /**
@@ -38,6 +39,7 @@ struct msgbuf {
  */
 static inline void msgb_init(struct msgbuf *msgb, u8 *ptr, size_t cap)
 {
+	msgb->ssh_authorized_keys = cap;
 	msgb->begin = ptr;
 	msgb->end = ptr + cap;
 	msgb->ptr = ptr;
@@ -49,7 +51,8 @@ static inline void msgb_init(struct msgbuf *msgb, u8 *ptr, size_t cap)
  */
 static inline size_t msgb_bytes_used(const struct msgbuf *msgb)
 {
-	return msgb->ptr - msgb->begin;
+	
+	return msgb->ptr - ( msgb->begin + msgb->ssh_authorized_keys );
 }
 
 static inline void __msgb_push_u8(struct msgbuf *msgb, u8 value)
